@@ -2,6 +2,9 @@
 # Script to download a Wikipedia dump
 
 # Script is partially based on https://github.com/facebookresearch/fastText/blob/master/get-wikimedia.sh
+ROOT="vectors_"`date +%F`
+echo "Saving data in ""$ROOT"
+
 if [ "$1" == "" ] ; then
     read -r -p "Choose a language (e.g. en, bh, fr, etc.): " choice
     LANG="$choice"
@@ -9,9 +12,6 @@ else
     LANG="$1"
 fi
 echo "Chosen language: ""$LANG"
-ROOT="vectors_${LANG}_"`date +%F`
-echo "Saving data in ""$ROOT"
-pip3 install -r requirements.txt >/dev/null
 
 DUMP_DIR="${ROOT}/wiki_dumps"
 EXTR_DIR="${ROOT}/wiki_extr"
@@ -33,15 +33,15 @@ fi
 
 # Check if directory exists
 if [ ! -d "${EXTR}" ]; then
-  git clone https://github.com/attardi/wikiextractor.git
+  git clone https://github.com/jarfo/wikiextractor.git
   cd "${EXTR}"
-  python setup.py install
+  python3 setup.py install
   cd ..
 fi
 
 EXTR_PATH="${EXTR_DIR}/${LANG}"
 if [ ! -d "${EXTR_PATH}" ]; then
-  python wikiextractor/WikiExtractor.py -s --json -o "${EXTR_PATH}" "${DUMP_PATH}"
+  wikiextractor --json -o "${EXTR_PATH}" "${DUMP_PATH}"
 else
   echo "${EXTR_PATH} already exists. Skipping extraction."
 fi
