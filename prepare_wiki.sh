@@ -35,7 +35,7 @@ fi
 if [ ! -d "${EXTR}" ]; then
   git clone https://github.com/jarfo/wikiextractor.git
   cd "${EXTR}"
-  python3 setup.py install
+  python3 setup.py install --user
   cd ..
 fi
 
